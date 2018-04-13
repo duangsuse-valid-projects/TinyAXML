@@ -1,0 +1,42 @@
+# duangsuse <=> makefile(((())))
+.PHONY: prepare_source build build_all test install clean javaDoc
+
+TINYAXML_PLUG=$(HOME)/.config/tinyaxml/
+JAVAC=javac
+JAVACFLAGS=
+JAVADOC=javadoc
+JAVADOCFLAGS=-html5
+FILES=hello.java
+OBJS=bin/hello.class
+
+build: prepare_source $(OBJS)
+	cd bin; rm *.java # Removing temp sources
+
+bin/hello.class: hello.java
+	cd bin; $(JAVAC) hello.java # Compiling helloworld plugin
+
+prepare_source:
+	mkdir -p bin # Classes built in bin
+	cp $(FILES) bin # Copy source files
+
+# *.java: prepare_source
+# 	cd bin; $(JAVAC) *
+
+build_all: prepare_source # Recompile all files all times XD 
+	cd bin; $(JAVAC) $(FILES) # Compile javas using javac
+
+test:
+	bash test.sh # Just run test.sh
+
+install: build
+	cd bin; cp *.class $(TINYAXML_PLUG) # copy plugins
+
+clean:
+	@rm -f *.class # Remove all temp classes
+	rm -rf bin # Cleaning classes
+	rm -rf jdoc # Cleaning documents
+
+javaDoc:
+	mkdir -p jdoc # Docs built in jdoc
+	cp $(FILES) jdoc # Copy source files
+	cd jdoc; $(JAVADOC) $(JAVADOCFLAGS) $(FILES) # Build document using javadoc

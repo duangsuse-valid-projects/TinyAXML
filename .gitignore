@@ -1,0 +1,12 @@
+# Gradle files
+.gradle/
+# IDEA Local workspace
+.idea/workspace.xml
+# Gradle builds
+build/
+# VSCode/IDEA Bin
+bin/
+# Plugins Classes
+plugins/bin/
+# Plugins JavaDoc
+plugins/jdoc/
