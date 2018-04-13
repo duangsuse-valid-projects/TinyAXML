@@ -1,3 +1,5 @@
 package org.duangsuse.tinyaxml.error;
 
-class ExtenssionBootstrapError extends Exception {}
+class ExtensionBootstrapError extends Exception {
+    private static final long serialVersionUID = -959152103689398633L;
+}
