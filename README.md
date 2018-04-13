@@ -2,7 +2,7 @@
 
 此为 [AXMLEditor](https://github.com/fourbrother/AXMLEditor) 重写后的工具, 添加了 `dump/build/plugin` 指令(插件), 解决了那个工具的部分错误
 
-实际上原重构工程量太大了... 而且有太多因为采用完全 _ser/deser_ 而弃用的代码和认为不够合适的代码, 故决定以那个工具的部分代码为基础重做一个新的库
+实际上重构原项目工程量太大了... 而且有太多因为采用完全 _ser/deser_ 而弃用的代码和认为不够合适的代码, 故决定以那个工具的部分代码为基础重做一个新的库(实际上没用)
 
 和那个工具一样, 本源采用 `Unlicensed` 许可证, 你爱怎么办怎么办, 本库的文档测试覆盖机会大概计划比那个高一点, 使用插件系统, 本身基本只包含 AXML 处理逻辑
 
@@ -58,7 +58,7 @@ public class PrintResourceIds() {
 }
 ```
 
-> run plugin: tinyaxml printResourceIds.class AndroidManifest.xml
+> Run plugin: tinyaxml printResourceIds.class AndroidManifest.xml
 
 ### 方便的脚本
 
@@ -73,8 +73,7 @@ java -cp ../../:tinyaxml-*.jar org.duangsuse.tinyaxml.Main $*
 
 > mkdir $HOME/.local/tinyaxml
 > cd $HOME/Projects/tinyaxml/plugins; make install
-
-> view JavaDoc for library documents
+> View JavaDoc for library documents
 
 ### 插入属性
 
@@ -172,6 +171,8 @@ tinyaxml 一般只接受长度在 _1_ 以上的参数 (至少有 plugin)
 ```
 
 同时指定文件 I/O 或指定输入以使用默认推导, 如果没有写出就不使用 `process` 方法, 转而尝试 `main` 方法
+
+如果没有找到 `AxmlFile process(AxmlFile, String[])` 或 `void process(AxmlFile, String[])`, 就使用 `argv[1..-1]` 调用插件类的 `void main(String[])` 方法
 
 如果发现有无返回值的 `process` 方法, 不使用输出.
 

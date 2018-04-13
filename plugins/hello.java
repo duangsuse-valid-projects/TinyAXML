@@ -11,7 +11,7 @@
 public class hello {
     public static final String hello = "Hello, world!";
 
-    public static void main(String args) {
+    public static void main(String[] args) {
         System.out.println(hello);
     }
 }
