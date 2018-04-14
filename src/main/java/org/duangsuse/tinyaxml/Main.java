@@ -248,7 +248,8 @@ public class Main {
         });
 
         putsv("CMDLine Arguments: ");
-        pAry(ppAry(args));
+        if (verbose)
+            pAry(ppAry(args));
 
         if (args.length == 0)
             invokePlugin(missingPluginId, null); // call plugin_missing if no arg is given
@@ -408,7 +409,15 @@ public class Main {
             try {
                 process_method = pluginClass.getDeclaredMethod(pluginMainMethodId, new Class<?>[] {String[].class});
                 try {
-                    process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {cropAry(Main.args, 1, args.length)});
+                    String[] carg = null;
+                    if (Main.args.length != 0)
+                        if (Main.args.length != 1)
+                            carg = (String[])cropAry(Main.args, 1, Main.args.length);
+                        else
+                            carg = Main.args;
+                    else
+                        carg = new String[0];
+                    process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {carg});
                     System.exit(0); // exit XD
                 } catch (IllegalAccessException e) {
                     warn("Access should be public in plugin(invoking main)");
@@ -416,16 +425,17 @@ public class Main {
                 } catch (InvocationTargetException e) {
                     warn("ITE caught, maybe it's thrown by plugin class(invoking main)");
                     e.getTargetException().printStackTrace(stderr);
+                    panic("That's all");
                 } catch (InstantiationException e) {
                     warn("Failed to construct class!!!(main)");
                     System.exit(5);
                 }
             } catch (NoSuchMethodException e) {
-                warn("Bad plugin. neither process nor main method found");
+                warn("Bad plugin. neither process nor main method could be found");
                 System.exit(4);
             }
-            warn("Failed preparing plugin: cannot get process method");
-            System.exit(4); // Bad(
+            // warn("Failed preparing plugin: cannot get process method");
+            // System.exit(4); // Bad(
         }
         if (process_method.getReturnType().equals(AxmlFile.class))
             shouldWrite = true; // or I won't write generated file to out
@@ -477,10 +487,10 @@ public class Main {
                 fout.flush(); // flush buffer
                 fout.close();
             } catch (FileNotFoundException ignored) {
-                warn("output file moved(");
+                warn("Output file moved(");
                 System.exit(6);
             } catch (IOException ignored) {
-                warn("failed to output");
+                warn("Failed to output");
                 System.exit(6);
             }
         }
@@ -540,11 +550,12 @@ public class Main {
             class_file = new File(pluginClassPath + id + ".class");
         }
         if (!class_file.exists()) { // no recursive loops
-            if (!id.equals(missingPluginId))
+            if (!id.equals(missingPluginId)) {
                 // invokePlugin(missingPluginId, new String[] {id}); // yes to plugin_missing plugin
-                findAndLoadPlugin(missingPluginId); // FIXED
-            else {
-                warn("plugin_missing plugin not installed");
+                findAndLoadPlugin(missingPluginId); // FIXED (no return stmt)
+                return;
+            } else {
+                warn("Plugin plugin_missing plugin not installed, try -h for help");
                 throw new ExtensionBootstrapError(Errno.EPLUGINNODEF);
             }
         }
