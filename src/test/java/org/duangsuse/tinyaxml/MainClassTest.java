@@ -57,8 +57,8 @@ public class MainClassTest {
     @Test
     public void isIsFileAndCheckFileWorks() throws IOException {
         // Runner OS must be GNU/Linux
-        assertTrue(Main.isFile(File.createTempFile("axmltest", "txt").getPath()));
-        assertTrue(Main.checkFile(File.createTempFile("axmltest", "ex")));
+        assertTrue(Main.isFile(File.createTempFile("axmltest_", ".txt").getPath()));
+        assertTrue(Main.checkFile(File.createTempFile("axmltest_", ".ex")));
         assertTrue(Main.isFile("/proc/cmdline"));
         assertFalse(Main.isFile("/"));
         assertFalse(Main.checkFile(new File("/proc/cmdline")));

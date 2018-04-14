@@ -21,6 +21,9 @@ import java.nio.file.FileAlreadyExistsException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 import org.duangsuse.tinyaxml.error.*;
 
 /**
@@ -85,6 +88,8 @@ public class Main {
     public static boolean isLittleEndian = true;
     /** Output file infered?? */
     public static boolean isOutputFileInfered = true;
+    /** Keep going even if out is not writeable? */
+    public static boolean isKeep = false;
 
     /**
      * gets environment var 'name' or default string
@@ -284,15 +289,24 @@ public class Main {
                 if (!checkFile(in) || !checkFile(out))
                     warn("Bad file permisson or output file, bad("); // XD
                 isOutputFileInfered = false; // plugin API implementation
-                boolean b = false;
+                boolean b = true;
                 try { b = out.createNewFile(); }
                 catch (IOException ignored) { warn("IO error creating output file"); }
-                if (!out.mkdirs() || !b) {
-                    warn("Failed to create output file!, falling back to use temp file (Interrupt ^C now if you want to exit)");
+                if (!b)
+                    puts("Output file exists, that's OK");
+                if (!b) if (!out.canWrite()) { // Validate only if file is not created by CLI
+                    warn("Failed to validate output file!, falling back to use temp file (Interrupt ^C now if you want to exit or keep going)");
+                    Signal.handle(new Signal("INT"), new SignalHandler() {
+                        @Override
+                        public void handle(Signal ignored) {
+                            String decision = gets("Keep goning with orginal file? [Y/n]");
+                            Main.isKeep = (decision.length() == 0 || decision.equals("y"));
+                        }
+                    });
                     try {
                         Thread.sleep(3000);
-                        try {
-                            out = File.createTempFile("tinyaxml", "xml");
+                        if(!isKeep) try {
+                            out = File.createTempFile("tinyaxml_", ".xml");
                             warn(String.format("Writting to %1$s...", out.getAbsolutePath()));
                         } catch (IOException e) {
                             warn("Failed to create temp file!!!");
