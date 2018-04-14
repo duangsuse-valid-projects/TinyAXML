@@ -422,7 +422,7 @@ public class Main {
                                 carg = ppAry(cropAry(Main.args, 1, Main.args.length - 1));
                             else carg = new String[] {Main.args[1]};
                         else
-                            carg = new String[0];
+                            carg = new String[] {Main.args[0]};
                     else
                         carg = new String[0];
                     process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {carg}); // main(String[] args)
