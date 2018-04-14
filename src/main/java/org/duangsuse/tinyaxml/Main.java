@@ -400,7 +400,7 @@ public class Main {
     public static String gets(String prompt) {
         stdout.print(prompt); // display ps1
         Scanner scan = new Scanner(stdin);
-        String tmp = scan.toString();
+        String tmp = scan.nextLine();
         scan.close();
         return tmp;
     }

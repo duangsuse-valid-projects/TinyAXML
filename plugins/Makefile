@@ -14,7 +14,7 @@ build: prepare_source $(OBJS)
 	cd bin; rm *.java # Removing temp sources
 
 bin/hello.class: hello.java
-	cd bin; $(JAVAC) hello.java # Compiling helloworld plugin
+	cd bin; $(JAVAC) $(CLASSPATH) hello.java # Compiling helloworld plugin
 
 bin/plugin_missing.class: plugin_missing.java
 	cd bin; $(JAVAC) $(CLASSPATH) plugin_missing.java # Compiling plugin missing plugin

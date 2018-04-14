@@ -1,3 +1,4 @@
+import org.duangsuse.tinyaxml.Main;
 // A hello-world plugin!!!
 
 /**
@@ -17,5 +18,6 @@ public class hello {
         System.out.println(hello);
         for (String s:args)
             System.out.print(s);
+        Main.puts(Main.gets("Input: "));
     }
 }
