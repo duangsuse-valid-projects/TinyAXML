@@ -1,7 +1,9 @@
 // TinyAXML CLI(plugin runner)
 package org.duangsuse.tinyaxml; // tinyaxml <3 duangsuse
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +13,8 @@ import java.io.PrintStream;
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.net.URLClassLoader;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.FileAlreadyExistsException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -73,6 +77,8 @@ public class Main {
     public static boolean tryCompat = false;
     /** Should write file? */
     public static boolean shouldWrite;
+    /** Binary word little-endian or big-endian */
+    public static boolean isLittleEndian = true;
 
     /**
      * gets environment var 'name' or default string
@@ -112,10 +118,11 @@ public class Main {
      * 
      * @param ary input array
      * @return reverse indexed object
+     * @throws IndexOutOfBoundsException if iob indexing array
      * @since 1.0
      */
-    public static Object revAry(Object[] ary, int index) {
-        return ary[ary.length - index];
+    public static Object revAry(Object[] ary, int index) throws IndexOutOfBoundsException {
+        return ary[ary.length - index - 1];
     }
 
     /**
@@ -310,6 +317,39 @@ public class Main {
     }
 
     /**
+     * Convert a binary word(32bit) to Java int
+     * 
+     * Example:
+     *  {@code word2Int([0, 0, 0, 0]) -> 0}
+     * 
+     * @param ary array of 4 bytes
+     * @return converted integer
+     * @throws IllegalArgumentException if ary size is bigger/smaller than 4
+     */
+    public static int word2Int(byte[] ary) throws IllegalArgumentException {
+        if (ary.length != 4)
+            throw new IllegalArgumentException("Word size must be 4");
+        ByteBuffer bb = ByteBuffer.wrap(ary);
+        if (isLittleEndian)
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+       return  bb.getInt();
+    }
+
+    /**
+     * Convert a integer to binary 4-byte ary
+     * 
+     * @param i input integer to convert
+     * @return array of 4-byte converted binary word
+     */
+    public static byte[] int2Word(int i) {
+        ByteBuffer b = ByteBuffer.allocate(4); // Allocate a 4-byte ary
+        if (isLittleEndian)
+            b.order(ByteOrder.LITTLE_ENDIAN);
+        b.putInt(i);
+        return b.array();
+    }
+
+    /**
      * Finds and invokes a plugin using given args, and sync with I/O file if needed
      * 
      * @param id plugin ID or path, not nullable
@@ -326,6 +366,7 @@ public class Main {
             System.exit(3); // Extension error
         }
 
+        // void process or void main or AxmlFile process
         shouldWrite = false;
         Method process_method = null;
         try {
@@ -335,6 +376,7 @@ public class Main {
                 process_method = pluginClass.getDeclaredMethod(pluginMainMethodId, new Class<?>[] {String[].class});
                 try {
                     process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {cropAry(Main.args, 1, args.length)});
+                    System.exit(0); // exit XD
                 } catch (IllegalAccessException e) {
                     warn("Access should be public in plugin(invoking main)");
                     System.exit(5);
@@ -355,10 +397,31 @@ public class Main {
         if (process_method.getReturnType().equals(AxmlFile.class))
             shouldWrite = true; // or I won't write generated file to out
         // invoke now!
+        // First: read input, parse it
         AxmlFile axml = null;
+        FileInputStream axml_fin = null;
+        try {
+            axml_fin = new FileInputStream(in);
+            inBuf = new byte[axml_fin.available()];
+            InputStream bufin = new BufferedInputStream(axml_fin);
+            bufin.read(inBuf);
+            bufin.close();
+        } catch (FileNotFoundException ignored) {
+            warn("Input file not found!");
+            System.exit(2);
+        } catch (IOException ignored) {
+            warn("Cannot read input file");
+            System.exit(2);
+        } finally {
+            if (axml_fin != null)
+                try {
+                      axml_fin.close();
+                } catch (IOException ignored) {}
+        }
+        AxmlFile axml_in = new AxmlFile(inBuf);
         putsv("Invoking process at " + System.currentTimeMillis());
         try {
-            axml = (AxmlFile)process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {args});
+            axml = (AxmlFile)process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {axml_in});
         } catch (IllegalAccessException e) {
             warn("Access should be public in plugin");
             System.exit(4);
