@@ -9,6 +9,9 @@ apply plugin: 'java'
 // Java 1.8 Good +1
 sourceCompatibility = 1.8
 
+// JavaDoc !
+// javadoc.options // Bad gradle... no custom flags supported
+
 // This is in case we ever use non-ASCII chars in sources
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'

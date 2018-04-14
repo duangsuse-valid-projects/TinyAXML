@@ -105,17 +105,26 @@ public class Main {
         return tmp == null ? defaultVal : tmp;
     }
 
-    /** display stdout message @see PrintStream#println() */
+    /** display stdout message
+        @param msg message
+        @see PrintStream#println()
+    */
     public static void puts(String msg) {
         stdout.println(msg);
     }
 
-    /** display stderr message @see PrintStream#println() */
+    /** display stderr message
+        @param msg message
+        @see PrintStream#println()
+   */
     public static void warn(String msg) {
         stderr.println(msg);
     }
 
-    /** puts verbose information @see Main#puts(String) */
+    /** puts verbose information
+        @param msg message
+        @see Main#puts(String)
+   */
     public static void putsv(String msg) {
         if(verbose)
             puts(msg);
@@ -128,6 +137,7 @@ public class Main {
      * {@code revAry([0, 1, 2, 3], 0) -> 3}
      * 
      * @param ary input array
+     * @param index array reverse index
      * @return reverse indexed object
      * @throws IndexOutOfBoundsException if iob indexing array
      * @since 1.0
@@ -156,7 +166,7 @@ public class Main {
     }
 
     /**
-     * given path exists & is a file?
+     * given path exists and is a file?
      * 
      * @param path file path
      * @return is a valid file
@@ -170,10 +180,10 @@ public class Main {
     }
 
     /**
-     * check file, readable&writeable?
+     * check file, readable and writeable?
      * 
      * @param f given file object
-     * @return can read&write?
+     * @return can read and write?
      * @since 1.0
      */
     public static boolean checkFile(File f) {
@@ -206,7 +216,13 @@ public class Main {
         System.arraycopy(ary, start, tmp, 0, length); // copy!
         return tmp;
     }
-    /** byte[] version of cropAry @see Main#cropAry(Object[], int, int) */
+    /** byte[] version of cropAry
+        @param ary input byte array
+        @param start crop start index
+        @param end crop end index
+        @return array slice
+        @see Main#cropAry(Object[], int, int)
+    */
     public static byte[] cropAry(byte[] ary, int start, int end) {
         int ary_size = ary.length;
         if (start == end)
