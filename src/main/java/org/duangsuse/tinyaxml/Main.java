@@ -69,6 +69,8 @@ public class Main {
     public static byte[] inBuf;
     /** Plugin path */
     public static String pluginClassPath = envOr(pluginPathEnv, defaultPluginPath);
+    /** The pluginClass classloader */
+    public static ClassLoader cl;
     /** Loaded plugin class */
     public static Class<?> pluginClass;
     /** Be more verbose? */
@@ -209,7 +211,22 @@ public class Main {
     }
 
     /**
+     * Print string array
+     * 
+     * @param ary string array
+     * @since 1.0
+     */
+    public static void pAry(String[] ary) {
+        stdout.print(" [Array]: ");
+        for (String s:ary)
+            stdout.print(s);
+        puts("");
+    }
+
+    /**
      * Main method, usage refer to class document
+     * 
+     * No automatic tests required
      * 
      * @param args command line arguments
      * @since 1.0
@@ -230,7 +247,8 @@ public class Main {
             }
         });
 
-        putsv("CMDLine Arguments: " + ppAry(args));
+        putsv("CMDLine Arguments: ");
+        pAry(ppAry(args));
 
         if (args.length == 0)
             invokePlugin(missingPluginId, null); // call plugin_missing if no arg is given
@@ -350,7 +368,20 @@ public class Main {
     }
 
     /**
+     * Raise a error message and then stops the program
+     * 
+     * @param msg error message
+     * @since 1.0
+     */
+    public static void panic(String msg) {
+        warn(msg);
+        System.exit(1);
+    }
+
+    /**
      * Finds and invokes a plugin using given args, and sync with I/O file if needed
+     * <p>
+     * No automatic tests required
      * 
      * @param id plugin ID or path, not nullable
      * @param args args passed to the plugin, null for blank argument
@@ -369,6 +400,8 @@ public class Main {
         // void process or void main or AxmlFile process
         shouldWrite = false;
         Method process_method = null;
+        if (pluginClass == null)
+            panic("Failed to get plugin");
         try {
             process_method = pluginClass.getDeclaredMethod(pluginProcessMethodId, new Class<?>[] {AxmlFile.class});
         } catch (NoSuchMethodException ignored) {
@@ -454,7 +487,44 @@ public class Main {
     }
 
     /**
+     * Load a class from class file, or panic
+     * <p> loaded class to {@link Main#pluginClass}
+     * <p> No automatic tests required
+     * @param file class file path dir
+     * @param name class name
+     * @since 1.0
+     */
+    public static void loadClass(File file, String name) {
+        // now normal
+        try {
+            // convert to URL
+            URL url = file.toURI().toURL();
+            putsv("Loading url class: " + url.toString());
+            URL[] urls = new URL[] {url};
+            // now use URLClassLoader to load this class
+            cl = new URLClassLoader(urls);
+
+            pluginClass = cl.loadClass(name); // must be same with file name
+            if (pluginClass == null)
+                System.exit(4);
+            /*
+            try {
+                cl.close(); // close class loader
+                // FIXED: I won't close class loader until process finished
+            } catch (IOException ignored) {
+                throw new ExtensionBootstrapError(Errno.EIOEXCEPT);
+            }
+            */
+        } catch (MalformedURLException ignored) {}
+        catch (ClassNotFoundException ignored) {
+            panic("Failed to load plugin class! plugin classname must be same with plugin ID");
+        } // eat(
+    }
+
+    /**
      * Finds and loads the plugin class
+     * <p>
+     * No automatic tests required
      * 
      * @param id plugin ID or path
      * @throws ExtensionBootstrapError error loading plugin class
@@ -471,29 +541,14 @@ public class Main {
         }
         if (!class_file.exists()) { // no recursive loops
             if (!id.equals(missingPluginId))
-                invokePlugin(missingPluginId, new String[] {id}); // yes to plugin_missing plugin
+                // invokePlugin(missingPluginId, new String[] {id}); // yes to plugin_missing plugin
+                findAndLoadPlugin(missingPluginId); // FIXED
             else {
                 warn("plugin_missing plugin not installed");
                 throw new ExtensionBootstrapError(Errno.EPLUGINNODEF);
             }
         }
 
-        // now normal
-        try {
-            // convert to URL
-            URL url = class_file.toURI().toURL();
-            putsv("loading url class: " + url.toString());
-            URL[] urls = new URL[] {url};
-            // now use URLClassLoader to load this class
-            URLClassLoader cl = new URLClassLoader(urls);
-
-            pluginClass = cl.loadClass(id); // must be same with file name
-            try {
-                cl.close(); // close class loader
-            } catch (IOException ignored) {
-                throw new ExtensionBootstrapError(Errno.EIOEXCEPT);
-            }
-        } catch (MalformedURLException ignored) {}
-          catch (ClassNotFoundException ignored) {} // eat(
+        loadClass(class_file.getParentFile(), id);
     }
 }
