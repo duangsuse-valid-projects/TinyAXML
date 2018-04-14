@@ -12,7 +12,8 @@ import org.duangsuse.tinyaxml.Main;
 public class to_s {
     public to_s() {}
 
-    public void process(AxmlFile a) {
+    public void process(AxmlFile a, String[] args) {
+        Main.pAry(args);
         Main.puts(a.toString());
     }
 }

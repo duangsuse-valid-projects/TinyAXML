@@ -217,9 +217,9 @@ public class Main {
      * @since 1.0
      */
     public static void pAry(String[] ary) {
-        stdout.print(" [Array]: ");
+        stdout.print(" [Array]:");
         for (String s:ary)
-            stdout.print(s);
+            stdout.print(" " + s);
         puts("");
     }
 
@@ -299,7 +299,10 @@ public class Main {
                         System.exit(2); // file...
                     }
                 }
-                invokePlugin(args[0], (String[])cropAry(args, 1, args.length - 2)); // arrCrop...
+                if (args.length != 3)
+                    invokePlugin(args[0], ppAry(cropAry(args, 1, args.length - 3))); // arrCrop...
+                else
+                    invokePlugin(args[0], new String[0]);
             } else { // now I must check if maybe_output_file is input file
                 if (isFile(maybe_output_path)) { // I/O auto-infered
                     File iofile = new File(maybe_output_path);
@@ -307,9 +310,12 @@ public class Main {
                     out = iofile;
                     if (!checkFile(iofile))
                         warn("Bad file permission, may cause failure(I/O same file infered)");
-                    invokePlugin(args[0], (String[])cropAry(args, 1, args.length - 1));
+                    if (args.length != 3)
+                        invokePlugin(args[0], ppAry(cropAry(args, 1, args.length - 2)));
+                    else
+                        invokePlugin(args[0], new String[] {args[1]});
                 } else {
-                    invokePlugin(args[0], (String[])cropAry(args, 1, args.length)); // now pass all arguments to plugin
+                    invokePlugin(args[0], ppAry(cropAry(args, 1, args.length - 1))); // now pass all arguments to plugin
                 }
             }
         }
@@ -404,7 +410,7 @@ public class Main {
         if (pluginClass == null)
             panic("Failed to get plugin");
         try {
-            process_method = pluginClass.getDeclaredMethod(pluginProcessMethodId, new Class<?>[] {AxmlFile.class});
+            process_method = pluginClass.getDeclaredMethod(pluginProcessMethodId, new Class<?>[] {AxmlFile.class, String[].class});
         } catch (NoSuchMethodException ignored) {
             try {
                 process_method = pluginClass.getDeclaredMethod(pluginMainMethodId, new Class<?>[] {String[].class});
@@ -412,12 +418,14 @@ public class Main {
                     String[] carg = null;
                     if (Main.args.length != 0)
                         if (Main.args.length != 1)
-                            carg = (String[])cropAry(Main.args, 1, Main.args.length);
+                            if (Main.args.length != 2)
+                                carg = ppAry(cropAry(Main.args, 1, Main.args.length - 1));
+                            else carg = new String[] {Main.args[1]};
                         else
-                            carg = Main.args;
+                            carg = new String[0];
                     else
                         carg = new String[0];
-                    process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {carg});
+                    process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {carg}); // main(String[] args)
                     System.exit(0); // exit XD
                 } catch (IllegalAccessException e) {
                     warn("Access should be public in plugin(invoking main)");
@@ -443,6 +451,8 @@ public class Main {
         // First: read input, parse it
         AxmlFile axml = null;
         FileInputStream axml_fin = null;
+        if (in == null)
+            panic("This plugin requires AXML input");
         try {
             axml_fin = new FileInputStream(in);
             inBuf = new byte[axml_fin.available()];
@@ -464,7 +474,7 @@ public class Main {
         AxmlFile axml_in = new AxmlFile(inBuf);
         putsv("Invoking process at " + System.currentTimeMillis());
         try {
-            axml = (AxmlFile)process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {axml_in});
+            axml = (AxmlFile)process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {axml_in, args});
         } catch (IllegalAccessException e) {
             warn("Access should be public in plugin");
             System.exit(4);
@@ -493,7 +503,7 @@ public class Main {
                 warn("Failed to output");
                 System.exit(6);
             }
-        }
+        } else puts("This plugin does not write to file.(");
     }
 
     /**

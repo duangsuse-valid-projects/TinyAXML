@@ -11,7 +11,7 @@ import org.duangsuse.tinyaxml.AxmlFile;
 public class process_sample {
     public process_sample() {}
 
-    public AxmlFile process(AxmlFile input) {
+    public AxmlFile process(AxmlFile input, String[] args) {
         return new AxmlFile(new byte[0]);
     }
 }
