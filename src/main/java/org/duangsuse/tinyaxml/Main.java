@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import java.util.Scanner;
+
 import java.net.URL;
 import java.net.MalformedURLException;
 import java.net.URLClassLoader;
@@ -81,6 +83,8 @@ public class Main {
     public static boolean shouldWrite;
     /** Binary word little-endian or big-endian */
     public static boolean isLittleEndian = true;
+    /** Output file infered?? */
+    public static boolean isOutputFileInfered = true;
 
     /**
      * gets environment var 'name' or default string
@@ -279,6 +283,7 @@ public class Main {
                 out = new File(maybe_output_path);
                 if (!checkFile(in) || !checkFile(out))
                     warn("Bad file permisson or output file, bad("); // XD
+                isOutputFileInfered = false; // plugin API implementation
                 boolean b = false;
                 try { b = out.createNewFile(); }
                 catch (IOException ignored) { warn("IO error creating output file"); }
@@ -383,6 +388,21 @@ public class Main {
     public static void panic(String msg) {
         warn(msg);
         System.exit(1);
+    }
+
+    /**
+     * Ask user for input from stdin
+     * 
+     * @param prompt information
+     * @return user input
+     * @since 1.0
+     */
+    public static String gets(String prompt) {
+        stdout.print(prompt); // display ps1
+        Scanner scan = new Scanner(stdin);
+        String tmp = scan.toString();
+        scan.close();
+        return tmp;
     }
 
     /**
