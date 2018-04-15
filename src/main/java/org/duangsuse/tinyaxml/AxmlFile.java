@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import org.duangsuse.tinyaxml.type.AttributeType;
 import org.duangsuse.tinyaxml.type.ChunkType;
 import org.duangsuse.tinyaxml.type.Element;
+import org.duangsuse.tinyaxml.type.ElementTree;
 
 // chunks
 import org.duangsuse.tinyaxml.chunk.*;
@@ -104,8 +105,15 @@ public class AxmlFile {
     public StartNameSpace startNS;
     public EndNameSpace endNS;
     // contains startTag and endTag information
-    public ArrayList<Element> elements;
+    public ArrayList<StartElement> startElements;
+    public ArrayList<EndElement> endElements;
+
     public ArrayList<TextElement> texts;
+
+    // quick link
+    public ArrayList<Element> elements;
+    // operation helper object
+    public ElementTree xmltree;
 
     /**
      * Constructor with byte[] input
