@@ -31,4 +31,15 @@ public enum Errno {
                 return "Unknown";
         }
     }
+
+    /**
+     * Implementaion of {@link Object#toString()}
+     * 
+     * @return Errno description
+     * @since 1.0
+     */
+    @Override
+    public String toString() {
+        return getDescription(); // <3
+    }
 }

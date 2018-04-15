@@ -452,6 +452,9 @@ public class Main {
         } catch (ExtensionBootstrapError e) {
             warn(e.errnum.getDescription());
             System.exit(3); // Extension error
+        } catch (FileIOError e) {
+            panic(e.errnum.getDescription());
+            System.exit(3); // ...
         }
 
         // void process or void main or AxmlFile process
@@ -560,14 +563,14 @@ public class Main {
     }
 
     /**
-     * Load a class from class file, or panic
+     * Load a class from class file, or throw FileIOException
      * <p> loaded class to {@link Main#pluginClass}
      * <p> No automatic tests required
      * @param file class file path dir
      * @param name class name
      * @since 1.0
      */
-    public static void loadClass(File file, String name) {
+    public static void loadClass(File file, String name) throws FileIOError {
         // now normal
         try {
             // convert to URL
@@ -590,7 +593,10 @@ public class Main {
             */
         } catch (MalformedURLException ignored) {}
         catch (ClassNotFoundException ignored) {
-            panic("Failed to load plugin class! plugin classname must be same with plugin ID");
+            warn("Failed to load plugin class! plugin classname must be same with plugin ID");
+            FileIOError e = new FileIOError(Errno.EPLUGINNODEF);
+            e.file = file;
+            throw e;
         } // eat(
     }
 
@@ -605,7 +611,7 @@ public class Main {
      * @see Main#defaultPluginPath
      * @see Main#pluginPathEnv
      */
-    public static void findAndLoadPlugin(String id) throws ExtensionBootstrapError {
+    public static void findAndLoadPlugin(String id) throws ExtensionBootstrapError, FileIOError {
         File class_file;
         if (id.endsWith(".class")) { // should be a class file
             class_file = new File(id);
@@ -619,7 +625,9 @@ public class Main {
                 return;
             } else {
                 warn("Plugin plugin_missing plugin not installed, try -h for help");
-                throw new ExtensionBootstrapError(Errno.EPLUGINNODEF);
+                ExtensionBootstrapError e = new ExtensionBootstrapError(Errno.EPLUGINNODEF);
+                e.extId = id;
+                throw e; // 干杯(
             }
         }
 

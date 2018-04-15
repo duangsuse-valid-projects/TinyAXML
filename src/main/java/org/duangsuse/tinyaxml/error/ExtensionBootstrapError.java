@@ -12,6 +12,9 @@ public class ExtensionBootstrapError extends Exception {
     /** Error kind @see Errno */
     public Errno errnum;
 
+    /** Finding plugin */
+    public String extId;
+
     /**
      * Constructor of ExtensionBootstrapError class
      * 
