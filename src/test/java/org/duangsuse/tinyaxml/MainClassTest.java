@@ -12,7 +12,10 @@ import java.lang.IllegalArgumentException;
 import org.duangsuse.tinyaxml.Main;
 import org.junit.Test;
 
-/** Unit test for the {@code Main} class */
+/** Unit tests for the {@code Main} class
+ * @version 1.0
+ * @author duangsuse
+ */
 
 public class MainClassTest {
     /** @see Main class constants */
@@ -42,6 +45,7 @@ public class MainClassTest {
         assertEquals(Main.revAry(ar2, 5), 4);
     }
 
+    /** @see Main#revAry(Object[], int) */
     @Test
     public void revAryThrowsRightException() {
         boolean ex = false;
@@ -86,6 +90,7 @@ public class MainClassTest {
         assertArrayEquals(new byte[] {3, 4, 5}, Main.cropAry(aryb, 2, 4)); // byte version works
     }
 
+    /** @see Main#cropAry(byte[], int, int) */
     @Test(expected=IllegalArgumentException.class)
     public void cropAryThrowsRightException() {
         boolean ex1 = false;
@@ -120,6 +125,12 @@ public class MainClassTest {
         assertEquals(Main.word2Int(test_byte), Main.word2Int(Main.int2Word(Main.word2Int(test_byte))));
     }
 
+    /**
+     * Convert... back again
+     * 
+     * @see Main#word2Int(byte[])
+     * @see Main#int2Word(int)
+     */
     @Test(expected=IllegalArgumentException.class)
     public void wordIntThrowsRightException() {
         for (int i = 0; i < 5; i++)

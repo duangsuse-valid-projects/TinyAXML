@@ -1,0 +1,22 @@
+{
+    "run": [
+        {
+            "name": "tinyaxml",
+            "projectName": "tinyaxml",
+            "workingDirectory": "${workspaceFolder}",
+            "args": [],
+            "vmargs": [],
+            "preLaunchTask": ""
+        }
+    ],
+    "debug": [
+        {
+            "name": "tinyaxml",
+            "projectName": "tinyaxml",
+            "workingDirectory": "${workspaceFolder}",
+            "args": [],
+            "vmargs": [],
+            "preLaunchTask": ""
+        }
+    ]
+}

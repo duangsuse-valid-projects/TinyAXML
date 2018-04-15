@@ -79,4 +79,14 @@ public enum ChunkType {
             default: return "Unknown";
         }
     }
+
+    /**
+     * {@link Object#toString()} implementation
+     * @return description of this type
+     * @since 1.0
+     */
+    @Override
+    public String toString() {
+        return getDescription();
+    }
 }

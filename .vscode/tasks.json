@@ -18,6 +18,11 @@
             "type": "shell",
             "command": "./gradlew test",
             "group": "test"
+        },
+        {
+            "label": "doc",
+            "type": "shell",
+            "command": "./gradlew javaDoc"
         }
     ]
 }
