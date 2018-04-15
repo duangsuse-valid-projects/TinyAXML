@@ -2,4 +2,4 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
-class StartElement implements IChunk {}
+public class StartElement implements IChunk {}
