@@ -1,3 +1,3 @@
 package org.duangsuse.tinyaxml.type;
 
-enum AttributeType {}
+public enum AttributeType {}
