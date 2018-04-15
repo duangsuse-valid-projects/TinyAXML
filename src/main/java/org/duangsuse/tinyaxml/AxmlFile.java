@@ -29,7 +29,7 @@ import org.duangsuse.tinyaxml.chunk.*;
  * @since 1.0
  * @author duangsuse
  */
-public class AxmlFile {
+public class AxmlFile implements IChunk {
     /**
      * Axml binary magic codes
      * 
@@ -129,13 +129,34 @@ public class AxmlFile {
     /**
      * Constructs AxmlFile with {@code byte[]-reprsentation} of target AXML document
      * and a {@code compat} switch as an argument to the parser
-     * <p> This method contains real parser logic
+     * <p> This method contains call to real parser logic
      * 
      * @param input AXML file bytes
      * @param compat Try to parse the file even if it's not supported
      * @since 1.0
      */
-    public AxmlFile(byte[] input, boolean compat) {}
+    public AxmlFile(byte[] input, boolean compat) {
+        // setup compat
+        Main.tryCompat = compat;
+
+        // initialize mappings
+        stringPool = new StringPool();
+        resMap = new ResourceMap();
+        startNS = new StartNameSpace();
+        startElements = new ArrayList<>();
+        endElements = new ArrayList<>();
+        texts = new ArrayList<>();
+
+        // call parser
+        fromBytes(input);
+
+        // fill quick links
+        for (int i = 0; i < startElements.size() - 1; i++) {
+            Element e = new Element(startElements.get(i), endElements.get(i));
+            elements.add(e);
+        }
+        xmltree = new ElementTree(elements); // initialize elementTree API
+    }
 
     /**
      * Constructs an AxmlFile with given file
@@ -164,6 +185,9 @@ public class AxmlFile {
         return buffer;
     }
 
+    /** Blank constructor */
+    public AxmlFile() {}
+
     /**
      * Constructs an AxmlFile with bytes in given file path
      * 
@@ -176,14 +200,34 @@ public class AxmlFile {
     }
 
     /**
-     * Alias for constructor
+     * Main parser logic
      * 
      * @param f input axml bytes
-     * @return axml object
      * @since 1.0
      */
-    public static AxmlFile fromBytes(byte[] f) {
-        return new AxmlFile(f);
+    @Override
+    public void fromBytes(byte[] f) {
+        // logic
+    }
+
+    @Override
+    public void update() {}
+
+    @Override
+    public int getMagic() {
+        return magic;
+    }
+
+    @Override
+    public int getSize() {
+        update();
+        return fsize;
+    }
+
+    @Override
+    public int getHeaderSize() {
+        update();
+        return hsize;
     }
 
     /**
@@ -202,5 +246,6 @@ public class AxmlFile {
     /** Alias for getBytes()
      * @return xmlfile bytes
      * @see getBytes() */
+    @Override
     public byte[] toBytes() { return getBytes(); }
 }

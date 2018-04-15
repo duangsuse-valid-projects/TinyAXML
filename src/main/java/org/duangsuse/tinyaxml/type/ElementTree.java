@@ -3,8 +3,6 @@ package org.duangsuse.tinyaxml.type;
 // Ary O<| duangsuse
 import java.util.ArrayList;
 
-import org.duangsuse.tinyaxml.chunk.EndElement;
-import org.duangsuse.tinyaxml.chunk.StartElement;
 // Element!!!
 import org.duangsuse.tinyaxml.type.Element;
 
@@ -28,8 +26,7 @@ public class ElementTree {
     public ElementTree() {}
 
     /** Construct from StartElement and EndElement list
-     * @param startags start StartElement s
-     * @param endtags end EndElement s
+     * @param tags StartElement and EndElements
      */
-    public ElementTree(ArrayList<StartElement> startags, ArrayList<EndElement> endtags) {}
+    public ElementTree(ArrayList<Element> tags) {}
 }
