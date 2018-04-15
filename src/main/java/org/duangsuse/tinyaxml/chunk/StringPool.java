@@ -48,5 +48,6 @@ public class StringPool implements IChunk {
         return ret;
     }
 
+    @Override
     public void update() {}
 }
