@@ -216,6 +216,7 @@ public class Main {
         System.arraycopy(ary, start, tmp, 0, length); // copy!
         return tmp;
     }
+
     /** byte[] version of cropAry
         @param ary input byte array
         @param start crop start index
@@ -633,7 +634,6 @@ public class Main {
                 throw e; // 干杯(
             }
         }
-
         loadClass(class_file.getParentFile(), id);
     }
 }
