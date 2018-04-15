@@ -11,6 +11,7 @@ import org.duangsuse.tinyaxml.type.Element;
  * <p>
  * Like:
  * <p> {@code <a name="foo"><b>foo</b></a><c></c> }
+ * 
  * @since 1.0
  * @author duangsuse
  */
@@ -26,6 +27,7 @@ public class ElementTree {
     public ElementTree() {}
 
     /** Construct from StartElement and EndElement list
+     * 
      * @param tags StartElement and EndElements
      */
     public ElementTree(ArrayList<Element> tags) {}

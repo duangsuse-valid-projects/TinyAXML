@@ -28,6 +28,7 @@ public class Attribute {
     public Attribute() {}
 
     /** Object quick-setup
+     * 
      * @param ns namespace index
      * @param name name index
      * @param str raw value index

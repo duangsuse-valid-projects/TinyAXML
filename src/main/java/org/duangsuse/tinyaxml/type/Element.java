@@ -20,6 +20,7 @@ public class Element {
     /** Blank constructor */
     public Element() {}
     /** Short-link for setting-up variables
+     * 
      * @param s startelement
      * @param e endelement
      */

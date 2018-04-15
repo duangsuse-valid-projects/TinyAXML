@@ -207,7 +207,7 @@ public class AxmlFile implements IChunk {
      */
     @Override
     public void fromBytes(byte[] f) {
-        // logic
+        // begin logic
     }
 
     @Override
@@ -244,6 +244,7 @@ public class AxmlFile implements IChunk {
     }
 
     /** Alias for getBytes()
+     * 
      * @return xmlfile bytes
      * @see getBytes() */
     @Override

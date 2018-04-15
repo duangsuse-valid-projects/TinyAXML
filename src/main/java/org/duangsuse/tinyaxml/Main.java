@@ -566,6 +566,7 @@ public class Main {
      * Load a class from class file, or throw FileIOException
      * <p> loaded class to {@link Main#pluginClass}
      * <p> No automatic tests required
+     * 
      * @param file class file path dir
      * @param name class name
      * @throws FileIOError if class file load fail
