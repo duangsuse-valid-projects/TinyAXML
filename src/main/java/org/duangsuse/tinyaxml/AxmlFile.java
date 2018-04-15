@@ -2,8 +2,12 @@ package org.duangsuse.tinyaxml;
 
 // AxmlFile parser class library
 
+import java.io.File;
+
+// needed for mapping ChunkType and AttributeType
 import java.util.Hashtable;
 
+// creating magic maps in this class
 import org.duangsuse.tinyaxml.type.AttributeType;
 import org.duangsuse.tinyaxml.type.ChunkType;
 
@@ -26,18 +30,28 @@ public class AxmlFile {
      */
     public static class MagicMaps {
         /** Chunk type magics */
-        static int[] CHUNK_TYPE_MAGICS = new int[] {};
+        static int[] CHUNK_TYPE_MAGICS = new int[] {
+            0x00080003, 0x001C0001, 0x00080180, 0x00100100, 0x00100101, 0x00100102, 0x00100103, 0x00100104
+        };
         /** Chunk type enum types */
-        static ChunkType[] CHUNK_TYPE_TYPES = new ChunkType[] {};
+        static ChunkType[] CHUNK_TYPE_TYPES = new ChunkType[] {
+            ChunkType.AXML, ChunkType.STR_POOL, ChunkType.RES_MAP, ChunkType.START_NS, ChunkType.END_NS,
+            ChunkType.START_TAG, ChunkType.END_TAG, ChunkType.TEXT_TAG
+        };
         /** magic to type mapping */
         public static Hashtable<Integer, ChunkType> CHUNK_TABLE;
         /** type to magic mapping */
         public static Hashtable<ChunkType, Integer> CHUNK_TABLE_REVERSE;
 
         /** Attribute type magics */
-        static int[] ATTR_TYPE_MAGICS = new int[] {};
+        static int[] ATTR_TYPE_MAGICS = new int[] {
+            0x03000008, 0x10000008, 0x01000008, 0x12000008, 0x02000008, 0x05000008, 0x06000008, 0x04000008, 0x11000008, 0x1C000008, 0x1D000008
+        };
         /** Attribute type enum types */
-        static AttributeType[] ATTR_TYPE_TYPES = new AttributeType[] {};
+        static AttributeType[] ATTR_TYPE_TYPES = new AttributeType[] {
+            AttributeType.STR, AttributeType.INT, AttributeType.RESOURCE, AttributeType.BOOL, AttributeType.ATTR, AttributeType.DIMEN,
+            AttributeType.FRACTION, AttributeType.FLOAT, AttributeType.FLAGS, AttributeType.COLOR1, AttributeType.COLOR2
+        };
         /** magic to attr type enum mapping */
         public static Hashtable<Integer, AttributeType> ATTR_TABLE;
         /** attr type back to enum type mapping */
@@ -88,12 +102,29 @@ public class AxmlFile {
     /**
      * Constructs AxmlFile with {@code byte[]-reprsentation} of target AXML document
      * and a {@code compat} switch as an argument to the parser
+     * <p> This method contains real parser logic
      * 
      * @param input AXML file bytes
      * @param compat Try to parse the file even if it's not supported
      * @since 1.0
      */
     public AxmlFile(byte[] input, boolean compat) {}
+
+    /**
+     * Constructs an AxmlFile with given file
+     * 
+     * @param f the file
+     * @since 1.0
+     */
+    public AxmlFile(File f) {}
+
+    /**
+     * Constructs an AxmlFile with bytes in given file path
+     * 
+     * @param path file path
+     * @since 1.0
+     */
+    public AxmlFile(String path) {}
 
     /**
      * Alias for constructor
