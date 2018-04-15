@@ -22,7 +22,8 @@
         {
             "label": "doc",
             "type": "shell",
-            "command": "./gradlew javaDoc"
+            "command": "./gradlew javaDoc",
+            "problemMatcher": []
         }
     ]
 }

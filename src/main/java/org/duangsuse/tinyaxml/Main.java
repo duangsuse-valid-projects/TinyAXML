@@ -568,6 +568,7 @@ public class Main {
      * <p> No automatic tests required
      * @param file class file path dir
      * @param name class name
+     * @throws FileIOError if class file load fail
      * @since 1.0
      */
     public static void loadClass(File file, String name) throws FileIOError {
@@ -607,6 +608,7 @@ public class Main {
      * 
      * @param id plugin ID or path
      * @throws ExtensionBootstrapError error loading plugin class
+     * @throws FileIOError if {@link Main#loadClass(File, String)} throws an error
      * @see Main#pluginClass
      * @see Main#defaultPluginPath
      * @see Main#pluginPathEnv

@@ -9,7 +9,7 @@ import org.duangsuse.tinyaxml.AxmlFile;
  * <p>
  * Example: STR INT BOOL
  * 
- * {@link https://github.com/rednaga/axmlprinter/blob/master/src/main/java/android/content/res/chunk/AttributeType.java}
+ * https://github.com/rednaga/axmlprinter/blob/master/src/main/java/android/content/res/chunk/AttributeType.java
  * @author duangsuse
  * @since 1.0
  */

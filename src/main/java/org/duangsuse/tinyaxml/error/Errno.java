@@ -16,7 +16,7 @@ public enum Errno {
      * Gets the human-readable description of this error kind
      * <p>
      * Example:
-     * <p> {@code EIOEXCEPT.getDescription()} -> "IO Exception"
+     * <p> {@code EIOEXCEPT.getDescription()} to "IO Exception"
      * 
      * @return description of this error kind
      * @since 1.0

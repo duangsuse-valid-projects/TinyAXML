@@ -19,7 +19,10 @@ public class Element {
 
     /** Blank constructor */
     public Element() {}
-    /** Short-link for setting-up variables */
+    /** Short-link for setting-up variables
+     * @param s startelement
+     * @param e endelement
+     */
     public Element(StartElement s, EndElement e) {
         start = s;
         end = e;

@@ -23,8 +23,8 @@ import org.duangsuse.tinyaxml.chunk.*;
  * Android AXML binary file class
  * <p> AxmlFile can serialize to byte[] and back
  * 
- * {@link https://github.com/rednaga/axmlprinter/tree/master/src/main/java/android/content/res/chunk} parser
- * {@link https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331} axml format documentation(in Chinese)
+ * https://github.com/rednaga/axmlprinter/tree/master/src/main/java/android/content/res/chunk parser
+ * https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331 axml format documentation(in Chinese)
  * 
  * @since 1.0
  * @author duangsuse
@@ -200,6 +200,7 @@ public class AxmlFile {
     }
 
     /** Alias for getBytes()
+     * @return xmlfile bytes
      * @see getBytes() */
     public byte[] toBytes() { return getBytes(); }
 }

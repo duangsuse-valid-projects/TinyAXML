@@ -27,7 +27,13 @@ public class Attribute {
      */
     public Attribute() {}
 
-    /** Object quick-setup */
+    /** Object quick-setup
+     * @param ns namespace index
+     * @param name name index
+     * @param str raw value index
+     * @param type type
+     * @param data typed data
+     */
     public Attribute(int ns, int name, int str, int type, int data) {
         nameSpaceIndex = ns;
         nameIndex = name;

@@ -27,6 +27,9 @@ public class ElementTree {
     /** Blank constructor */
     public ElementTree() {}
 
-    /** Construct from StartElement and EndElement list */
+    /** Construct from StartElement and EndElement list
+     * @param startags start StartElement s
+     * @param endtags end EndElement s
+     */
     public ElementTree(ArrayList<StartElement> startags, ArrayList<EndElement> endtags) {}
 }

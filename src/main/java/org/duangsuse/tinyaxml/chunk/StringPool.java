@@ -8,7 +8,7 @@ import org.duangsuse.tinyaxml.IChunk;
  * 
  * @author duangsuse
  * @since 1.0
- * {@link https://github.com/fourbrother/AXMLEditor/blob/master/src/cn/wjdiankong/chunk/StringChunk.java}
+ * https://github.com/fourbrother/AXMLEditor/blob/master/src/cn/wjdiankong/chunk/StringChunk.java
  */
 public class StringPool implements IChunk {
     /** Header size(orignal) */

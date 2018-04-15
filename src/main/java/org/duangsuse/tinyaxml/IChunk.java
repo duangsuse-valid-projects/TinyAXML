@@ -7,7 +7,7 @@ package org.duangsuse.tinyaxml; // duangsuse <3 duangsuse XD
  * <p> with chunk (header)size, chunk magic, chunk body.
  * 
  * @author duangsuse
- * {@link https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331}
+ * https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331
  */
 public interface IChunk {
     /**
@@ -47,7 +47,6 @@ public interface IChunk {
      * <p> post-initialize chunk classes
      * 
      * @param bs chunk bytes including magic, size and body
-     * @return constructed object
      * @since 1.0
      */
     public void fromBytes(byte[] bs);

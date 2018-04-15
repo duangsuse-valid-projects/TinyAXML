@@ -10,8 +10,8 @@ import org.duangsuse.tinyaxml.AxmlFile;
  * 
  * @author duangsuse
  * @since 1.0
- * {@link https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331#%E4%BA%8C-axml-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F} (not used)
- * {@link https://github.com/rednaga/axmlprinter/blob/master/src/main/java/android/content/res/chunk/ChunkType.java}
+ * https://gist.github.com/duangsuse/3ae94e339eb188fa4ec8a87b6e105331#%E4%BA%8C-axml-%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F (not used)
+ * https://github.com/rednaga/axmlprinter/blob/master/src/main/java/android/content/res/chunk/ChunkType.java
  */
 public enum ChunkType {
     /** AXML header magic */
