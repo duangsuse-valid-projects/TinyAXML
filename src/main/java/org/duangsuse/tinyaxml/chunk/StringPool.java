@@ -2,4 +2,4 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
-class StringPool implements IChunk {}
+public class StringPool implements IChunk {}

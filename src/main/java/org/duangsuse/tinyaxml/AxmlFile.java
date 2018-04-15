@@ -8,10 +8,15 @@ import java.io.InputStream;
 import java.io.IOException;
 // needed for mapping ChunkType and AttributeType
 import java.util.Hashtable;
+import java.util.ArrayList;
 
 // creating magic maps in this class
 import org.duangsuse.tinyaxml.type.AttributeType;
 import org.duangsuse.tinyaxml.type.ChunkType;
+import org.duangsuse.tinyaxml.type.Element;
+
+// chunks
+import org.duangsuse.tinyaxml.chunk.*;
 
 /**
  * Android AXML binary file class
@@ -91,6 +96,16 @@ public class AxmlFile {
     public int hsize;
     /** Chunk size, including header and body */
     public int fsize;
+
+    // chunk data
+    public StringPool stringPool;
+    public ResourceMap resMap;
+
+    public StartNameSpace startNS;
+    public EndNameSpace endNS;
+    // contains startTag and endTag information
+    public ArrayList<Element> elements;
+    public ArrayList<TextElement> texts;
 
     /**
      * Constructor with byte[] input
