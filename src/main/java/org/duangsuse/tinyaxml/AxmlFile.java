@@ -3,7 +3,9 @@ package org.duangsuse.tinyaxml;
 // AxmlFile parser class library
 
 import java.io.File;
-
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.IOException;
 // needed for mapping ChunkType and AttributeType
 import java.util.Hashtable;
 
@@ -97,7 +99,9 @@ public class AxmlFile {
      * @author duangsuse
      * @since 1.0
      */
-    public AxmlFile(byte[] bytes) {}
+    public AxmlFile(byte[] bytes) {
+        this(bytes, false);
+    }
 
     /**
      * Constructs AxmlFile with {@code byte[]-reprsentation} of target AXML document
@@ -115,16 +119,38 @@ public class AxmlFile {
      * 
      * @param f the file
      * @since 1.0
+     * @throws IOException readFile(File) throws an error
      */
-    public AxmlFile(File f) {}
+    public AxmlFile(File f) throws IOException {
+        this(readFile(f));
+    }
+
+    /**
+     * Reads target file, returning an array of byte
+     * 
+     * @param f target file
+     * @return file bytes
+     * @since 1.0
+     * @throws IOException read/close error
+     */
+    public static byte[] readFile(File f) throws IOException {
+        InputStream is = new FileInputStream(f);
+        byte[] buffer = new byte[is.available()];
+        is.read(buffer);
+        is.close();
+        return buffer;
+    }
 
     /**
      * Constructs an AxmlFile with bytes in given file path
      * 
      * @param path file path
      * @since 1.0
+     * @throws IOException AxmlFile(File) throws an error
      */
-    public AxmlFile(String path) {}
+    public AxmlFile(String path) throws IOException {
+        this(new File(path));
+    }
 
     /**
      * Alias for constructor
@@ -145,8 +171,9 @@ public class AxmlFile {
      * @since 1.0
      */
     public byte[] getBytes() {
-        byte[] tmp = new byte[fsize];
-        return tmp;
+        // a new array with chunk size
+        byte[] ser = new byte[fsize];
+        return ser;
     }
 
     /** Alias for getBytes()
