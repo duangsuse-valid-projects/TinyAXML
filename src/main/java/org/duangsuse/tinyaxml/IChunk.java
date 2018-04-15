@@ -44,10 +44,12 @@ public interface IChunk {
 
     /**
      * Construct from bytes
+     * <p> post-initialize chunk classes
+     * <p> should be overriten by all classes that implements IChunk
      * 
      * @param bs chunk bytes including magic, size and body
      * @return constructed object
      * @since 1.0
      */
-    public Object fromBytes(byte[] bs);
+    public void fromBytes(byte[] bs);
 }

@@ -93,9 +93,9 @@ public class AxmlFile {
     }
     /** AxmlFile magic */
     public int magic;
-    /** AxmlFile header size */
+    /** AxmlFile header size(orginal) */
     public int hsize;
-    /** Chunk size, including header and body */
+    /** Chunk size, including header and body(orginal) */
     public int fsize;
 
     // chunk data
