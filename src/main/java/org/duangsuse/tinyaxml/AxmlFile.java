@@ -238,6 +238,8 @@ public class AxmlFile implements IChunk {
      * @since 1.0
      */
     public byte[] getBytes() {
+        update();
+
         // a new array with chunk size
         byte[] ser = new byte[fsize];
         return ser;

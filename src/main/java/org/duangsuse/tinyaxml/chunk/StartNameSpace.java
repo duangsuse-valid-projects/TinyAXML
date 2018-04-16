@@ -2,6 +2,7 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
+// TODO write document and define this chunk
 public class StartNameSpace implements IChunk {
     int hsize;
     int type;
