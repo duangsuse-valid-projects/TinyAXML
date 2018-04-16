@@ -2,11 +2,30 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
-// TODO write document and define this chunk
+/**
+ * AXML start namespace chunk
+ * 
+ * @author duangsuse
+ * @since 1.0
+ */
 public class StartNameSpace implements IChunk {
+    /** Chunk header size */
     int hsize;
+    /** Chunk magic */
     int type;
+    /** Chunk size */
     int size;
+    /** Line number */
+    public int lineNum;
+    /** Unknown */
+    public int unknown;
+    /** Prefix */
+    public int prefix;
+    /** Uri index */
+    public int uri;
+
+    /** Blank ctor */
+    public StartNameSpace() {}
 
     @Override
     public int getSize() {

@@ -1,12 +1,40 @@
 package org.duangsuse.tinyaxml.chunk;
 
+import java.util.ArrayList;
 import org.duangsuse.tinyaxml.IChunk;
+import org.duangsuse.tinyaxml.type.Attribute;
 
-// TODO write document and define this chunk
+/**
+ * Start element chunk
+ * <p> See: https://github.com/duangsuse/AXMLEdit/blob/master/src/main/java/cn/wjdiankong/axmledit/chunk/StartTagChunk.java
+ * 
+ * @author duangsuse
+ * @since 1.0
+ */
 public class StartElement implements IChunk {
+    /** Header size */
     int hsize;
+    /** Magic */
     int type;
+    /** Chunk size */
     int size;
+    /** Line number */
+    public int lineNum;
+    /** Unknown */
+    public int unknown;
+    /** NS reference */
+    public int uri;
+    /** Tag name */
+    public int name;
+    /** Flags */
+    public int flag;
+    /** Class attribute */
+    public int classAttr;
+    /** Attributes */
+    public ArrayList<Attribute> attrList;
+
+    /** Blank ctor */
+    public StartElement() {}
 
     @Override
     public int getSize() {

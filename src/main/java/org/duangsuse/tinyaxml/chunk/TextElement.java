@@ -2,11 +2,29 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
-// TODO write document and define this chunk
+/**
+ * Text element chunk
+ * 
+ * @author duangsuse
+ * @since 1.0
+ */
 public class TextElement implements IChunk {
+    /** Header size */
     int hsize;
+    /** Type magic */
     int type;
+    /** Size */
     int size;
+    /** Line number */
+    public int lineNum;
+    /** Unknown */
+    public int unknown;
+    /** Name reference */
+    public int name;
+    /** Unknown 1 */
+    public int unknown1;
+    /** Unknown 2 */
+    public int unknown2;
 
     @Override
     public int getSize() {

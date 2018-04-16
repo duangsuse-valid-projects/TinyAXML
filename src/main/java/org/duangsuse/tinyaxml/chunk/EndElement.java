@@ -2,11 +2,30 @@ package org.duangsuse.tinyaxml.chunk;
 
 import org.duangsuse.tinyaxml.IChunk;
 
-// TODO write document and define this chunk
+/**
+ * AXML end element chunk
+ * 
+ * @author duangsuse
+ * @since 1.0
+ */
 public class EndElement implements IChunk {
+    /** Header size */
     int hsize;
+    /** Type */
     int type;
+    /** Size */
     int size;
+    /** Line number */
+    public int lineNum;
+    /** Unknown */
+    public int unknown;
+    /** NS reference */
+    public int uri;
+    /** Tag name */
+    public int name;
+
+    /** Blank ctor */
+    public EndElement() {}
 
     @Override
     public int getSize() {

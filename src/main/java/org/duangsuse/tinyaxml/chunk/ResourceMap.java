@@ -1,12 +1,26 @@
 package org.duangsuse.tinyaxml.chunk;
 
+import java.util.ArrayList;
 import org.duangsuse.tinyaxml.IChunk;
 
-// TODO write document and define this chunk
+/**
+ * Resource map is an array of integer
+ * 
+ * @author duangsuse
+ * @since 1.0
+ */
 public class ResourceMap implements IChunk {
+    /** Header size */
     int hsize;
+    /** Magic */
     int type;
+    /** Size */
     int size;
+
+    public ArrayList<Integer> resIds;
+
+    /** Blank ctor */
+    public ResourceMap() {}
 
     @Override
     public int getSize() {

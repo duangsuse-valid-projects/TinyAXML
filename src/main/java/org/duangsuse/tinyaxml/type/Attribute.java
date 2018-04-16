@@ -42,4 +42,13 @@ public class Attribute {
         this.type = type;
         typedData = data;
     }
+
+    /**
+     * To type enum
+     * 
+     * @since 1.0
+     */
+     public AttributeType typeToEnum() {
+        return AttributeType.fromMagic(type);
+     }
 }
