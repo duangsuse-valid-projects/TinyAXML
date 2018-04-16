@@ -21,6 +21,11 @@ import org.duangsuse.tinyaxml.chunk.*;
 import org.duangsuse.tinyaxml.error.Errno;
 import org.duangsuse.tinyaxml.error.ParseError;
 
+// helper
+import static org.duangsuse.tinyaxml.Main.int2Word;
+import static org.duangsuse.tinyaxml.Main.word2Int;
+import static org.duangsuse.tinyaxml.Main.cropAry;
+
 /**
  * Android AXML binary file class
  * <p> AxmlFile can serialize to byte[] and back
@@ -214,11 +219,60 @@ public class AxmlFile implements IChunk {
         if (f.length < 8)
             throw new ParseError(Errno.EBADLEN);
 
-        magic = Main.word2Int(Main.cropAry(f, 0, 3));
+        magic = word2Int(cropAry(f, 0, 3));
         if (magic != ChunkType.AXML.toMagic())
             if (!Main.tryCompat)
-                Main.panic("Failed to validate axml");
-        fsize = Main.word2Int(Main.cropAry(f, 4, 7));
+                throw new ParseError(Errno.EBADMAGIC);
+        fsize = word2Int(cropAry(f, 4, 7)); // file size
+        if (fsize != f.length)
+            if (!Main.tryCompat)
+                throw new ParseError(Errno.EBADLEN);
+
+        int offset = 8; // chunks!
+        while (offset <= f.length) {
+            int chunk_type = word2Int(cropAry(f, offset, offset + 3)); // magic
+            int chunk_size = word2Int(cropAry(f, offset + 4, offset + 4 + 3)); // size
+
+            int spol_magic = ChunkType.STR_POOL.toMagic();
+            int resmap_magic = ChunkType.RES_MAP.toMagic();
+            int sns_magic = ChunkType.START_NS.toMagic();
+            int stag_magic = ChunkType.START_TAG.toMagic();
+            int etag_magic = ChunkType.END_TAG.toMagic();
+            int ens_magic = ChunkType.END_NS.toMagic();
+            int text_magic = ChunkType.TEXT_TAG.toMagic();
+
+            byte[] bs = cropAry(f, offset, offset+ chunk_size);
+            // if...
+            if (chunk_type == spol_magic) {
+                stringPool = new StringPool();
+                stringPool.fromBytes(bs);
+            } else if (chunk_type == resmap_magic) {
+                resMap = new ResourceMap();
+                resMap.fromBytes(bs);
+            } else if (chunk_type == sns_magic) {
+                startNS = new StartNameSpace();
+                startNS.fromBytes(bs);
+            } else if (chunk_type == stag_magic) {
+                StartElement s = new StartElement();
+                s.fromBytes(bs);
+                startElements.add(s);
+            } else if (chunk_type == etag_magic) {
+                EndElement e = new EndElement();
+                e.fromBytes(bs);
+                endElements.add(e);
+            } else if (chunk_type == ens_magic) {
+                endNS = new EndNameSpace();
+                endNS.fromBytes(bs);
+            } else if (chunk_type == text_magic) {
+                TextElement t = new TextElement();
+                t.fromBytes(bs);
+                texts.add(t);
+            } else {
+                if (!Main.tryCompat)
+                    Main.panic("Invalid type at " + offset + ": " + f[offset]);
+            }
+            offset += chunk_size;
+        }
     }
 
     @Override
