@@ -67,4 +67,20 @@ public class StartElement implements IChunk {
     // make header inforamtion
     @Override
     public void update() {}
+
+    /**
+     * Is this tag your end tag?
+     * 
+     * @since 1.0
+     * @param e EndElement maybe real end tag
+     * @return true if it's my end tag
+     */
+    public boolean isEndTag(EndElement e) {
+        // must in same namespace <a><b/></a>
+        if (e.uri != uri)
+            return false;
+        if (e.name != name)
+            return false;
+        return true;
+    }
 }

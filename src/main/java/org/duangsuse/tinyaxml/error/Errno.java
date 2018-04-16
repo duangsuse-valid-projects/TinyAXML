@@ -10,7 +10,11 @@ public enum Errno {
     /** IO Exception */
     EIOEXCEPT,
     /** Could not find given plugin */
-    EPLUGINNODEF;
+    EPLUGINNODEF,
+    /** Bad AXML Magic */
+    EBADMAGIC,
+    /** Bad chunk length */
+    EBADLEN;
 
     /**
      * Gets the human-readable description of this error kind
@@ -27,6 +31,10 @@ public enum Errno {
                 return "Plugin not found";
             case EIOEXCEPT:
                 return "IO Exception";
+            case EBADMAGIC:
+                return "Bad AXML file magic";
+            case EBADLEN:
+                return "Bad length";
             default:
                 return "Unknown";
         }

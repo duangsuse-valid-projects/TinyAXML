@@ -528,7 +528,10 @@ public class Main {
                       axml_fin.close();
                 } catch (IOException ignored) {}
         }
-        AxmlFile axml_in = new AxmlFile(inBuf);
+        AxmlFile axml_in = null;
+        try {
+            axml_in = new AxmlFile(inBuf);
+        } catch (ParseError e) { panic(e.errnum.toString()); }
         putsv("Invoking process at " + System.currentTimeMillis());
         try {
             axml = (AxmlFile)process_method.invoke(pluginClass.getDeclaredConstructor(new Class<?>[] {}).newInstance(), new Object[] {axml_in, args});

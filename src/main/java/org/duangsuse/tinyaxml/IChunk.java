@@ -1,5 +1,7 @@
 package org.duangsuse.tinyaxml; // duangsuse <3 duangsuse XD
 
+import org.duangsuse.tinyaxml.error.ParseError;
+
 // WORD&binary <3 duangsuse
 
 /**
@@ -49,7 +51,7 @@ public interface IChunk {
      * @param bs chunk bytes including magic, size and body
      * @since 1.0
      */
-    public void fromBytes(byte[] bs);
+    public void fromBytes(byte[] bs) throws ParseError;
 
     /**
      * Updates chunk object static information(size, header size)

@@ -18,6 +18,8 @@ import org.duangsuse.tinyaxml.type.ElementTree;
 
 // chunks
 import org.duangsuse.tinyaxml.chunk.*;
+import org.duangsuse.tinyaxml.error.Errno;
+import org.duangsuse.tinyaxml.error.ParseError;
 
 /**
  * Android AXML binary file class
@@ -94,7 +96,7 @@ public class AxmlFile implements IChunk {
     /** AxmlFile magic */
     public int magic;
     /** AxmlFile header size(orginal) */
-    public int hsize;
+    public int hsize = 4;
     /** Chunk size, including header and body(orginal) */
     public int fsize;
 
@@ -122,7 +124,7 @@ public class AxmlFile implements IChunk {
      * @author duangsuse
      * @since 1.0
      */
-    public AxmlFile(byte[] bytes) {
+    public AxmlFile(byte[] bytes) throws ParseError {
         this(bytes, false);
     }
 
@@ -135,7 +137,7 @@ public class AxmlFile implements IChunk {
      * @param compat Try to parse the file even if it's not supported
      * @since 1.0
      */
-    public AxmlFile(byte[] input, boolean compat) {
+    public AxmlFile(byte[] input, boolean compat) throws ParseError {
         // setup compat
         Main.tryCompat = compat;
 
@@ -165,7 +167,7 @@ public class AxmlFile implements IChunk {
      * @since 1.0
      * @throws IOException readFile(File) throws an error
      */
-    public AxmlFile(File f) throws IOException {
+    public AxmlFile(File f) throws IOException, ParseError {
         this(readFile(f));
     }
 
@@ -195,7 +197,7 @@ public class AxmlFile implements IChunk {
      * @since 1.0
      * @throws IOException AxmlFile(File) throws an error
      */
-    public AxmlFile(String path) throws IOException {
+    public AxmlFile(String path) throws IOException, ParseError {
         this(new File(path));
     }
 
@@ -206,8 +208,17 @@ public class AxmlFile implements IChunk {
      * @since 1.0
      */
     @Override
-    public void fromBytes(byte[] f) {
+    public void fromBytes(byte[] f) throws ParseError {
         // begin logic
+        // parse magic and size
+        if (f.length < 8)
+            throw new ParseError(Errno.EBADLEN);
+
+        magic = Main.word2Int(Main.cropAry(f, 0, 3));
+        if (magic != ChunkType.AXML.toMagic())
+            if (!Main.tryCompat)
+                Main.panic("Failed to validate axml");
+        fsize = Main.word2Int(Main.cropAry(f, 4, 7));
     }
 
     @Override
